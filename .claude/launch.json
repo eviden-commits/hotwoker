@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hotworker-web",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["web/static-server.js"],
+      "port": 8129
+    }
+  ]
+}

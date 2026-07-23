@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>온열질환 자가진단</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1 id="appTitle">온열질환 자가진단</h1>
+    <select id="langSelect" class="lang-select">
+      <option value="ko">한국어</option>
+      <option value="zh">中文</option>
+      <option value="ru">Русский</option>
+      <option value="mn">Монгол</option>
+    </select>
+  </header>
+
+  <main>
+    <div id="infoBar" class="info-bar hidden">
+      <span><b id="infoBarSite"></b> · <span id="infoBarName"></span></span>
+      <button id="changeInfoBtn" type="button">현장/이름 변경</button>
+    </div>
+
+    <!-- Step 1: 현장/이름 -->
+    <section id="siteStep" class="card">
+      <h2 id="siteStepTitle">현장을 선택해주세요</h2>
+      <div class="field">
+        <label id="siteLabel">현장명</label>
+        <select id="siteSelect"></select>
+      </div>
+      <div class="field">
+        <label id="nameLabel">이름</label>
+        <input type="text" id="nameInput" placeholder="이름을 입력하세요" />
+      </div>
+      <div id="siteError" class="error-msg hidden"></div>
+      <button id="startBtn" type="button" class="btn btn-primary">시작하기</button>
+    </section>
+
+    <!-- Step 2: 증상 체크 -->
+    <section id="checkStep" class="card hidden">
+      <h2 id="checkStepTitle">현재 느껴지는 증상을 모두 체크해주세요</h2>
+      <div id="symptomList" class="symptom-list"></div>
+      <textarea id="otherText" class="hidden" placeholder="기타 증상을 구체적으로 적어주세요"></textarea>
+      <div id="checkError" class="error-msg hidden"></div>
+      <button id="submitBtn" type="button" class="btn btn-primary">제출하기</button>
+    </section>
+
+    <!-- Step 3: 결과 -->
+    <section id="resultStep" class="card hidden">
+      <h2 id="resultTitle">자가진단 결과</h2>
+      <div id="resultBadge" class="result-badge"></div>
+      <ul id="guideList" class="guide-list"></ul>
+      <div id="hotlineBox" class="hotline hidden">
+        <span id="hotlineLabel"></span>
+        <a id="hotlinePhone" href="tel:"></a>
+      </div>
+      <button id="backBtn" type="button" class="btn btn-outline">처음으로</button>
+    </section>
+  </main>
+</div>
+
+<script src="api.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

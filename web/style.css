@@ -1,0 +1,178 @@
+/**
+ * style.css
+ * 근로자 온열질환 자가진단 시스템
+ */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+:root {
+  --primary: #003a70;
+  --primary-light: #0056a3;
+  --bg: #f1f3f6;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --success: #15803d;
+  --success-bg: #f0fdf4;
+  --observe: #b45309;
+  --observe-bg: #fff7ed;
+  --warning: #b91c1c;
+  --warning-bg: #fef2f2;
+  --danger: #7f1d1d;
+  --danger-bg: #fee2e2;
+  --radius: 14px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--primary);
+  color: #fff;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  font-size: 15px; font-weight: 800; margin: 0; letter-spacing: -0.3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.lang-select {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+}
+.lang-select option { color: #0f172a; }
+
+main { flex: 1; padding: 20px; }
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 24px 20px;
+  margin-bottom: 16px;
+}
+
+.card h2 { font-size: 18px; font-weight: 800; margin: 0 0 20px; color: var(--primary); }
+
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+select, input[type="text"], textarea {
+  width: 100%;
+  padding: 13px 14px;
+  font-size: 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: inherit;
+  color: var(--text);
+  background: #fff;
+}
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(0,86,163,0.12);
+}
+textarea { resize: vertical; min-height: 60px; }
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn-outline { background: #fff; border: 1.5px solid var(--border); color: var(--text); margin-top: 10px; }
+
+.info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e0e7ef;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+.info-bar b { color: var(--primary); }
+.info-bar button {
+  background: none; border: none; color: var(--primary-light);
+  font-size: 12px; font-weight: 700; text-decoration: underline; cursor: pointer; padding: 0;
+}
+
+.symptom-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.symptom-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 10px;
+  cursor: pointer; background: #fff;
+}
+.symptom-item.checked { border-color: var(--primary); background: #eef4fb; }
+.symptom-item input { width: 18px; height: 18px; accent-color: var(--primary); }
+.symptom-item.emergency { border-color: var(--warning); }
+.symptom-item.emergency.checked { background: var(--warning-bg); }
+.symptom-item label { flex: 1; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+.error-msg { color: var(--warning); font-size: 13px; font-weight: 600; margin: -8px 0 16px; }
+
+.result-badge {
+  text-align: center; padding: 28px 16px; border-radius: var(--radius); margin-bottom: 16px; font-weight: 800;
+}
+.result-badge .level { font-size: 30px; margin-bottom: 6px; }
+.result-level-정상 { background: var(--success-bg); color: var(--success); }
+.result-level-관찰 { background: var(--observe-bg); color: var(--observe); }
+.result-level-경고 { background: var(--warning-bg); color: var(--warning); }
+.result-level-위험 { background: var(--danger-bg); color: var(--danger); }
+
+.guide-list { list-style: none; padding: 0; margin: 0; }
+.guide-list li {
+  padding: 12px 14px; background: var(--bg); border-radius: 10px; margin-bottom: 8px; font-size: 14px; line-height: 1.5;
+}
+
+.hotline {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--danger); color: #fff; border-radius: 10px; padding: 14px; margin-bottom: 16px;
+  font-weight: 800; font-size: 16px;
+}
+.hotline a { color: #fff; text-decoration: none; }
+
+.hidden { display: none !important; }
