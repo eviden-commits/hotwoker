@@ -104,16 +104,15 @@ function renderSymptomList() {
   list.innerHTML = SYMPTOM_KEYS.map((key) => {
     const isEmergency = key === "consciousness";
     return `
-      <div class="symptom-item${isEmergency ? " emergency" : ""}" data-key="${key}">
-        <input type="checkbox" id="sym_${key}" value="${key}" />
-        <label for="sym_${key}">${t(lang, "symptoms")[key]}</label>
-      </div>`;
+      <label class="symptom-item${isEmergency ? " emergency" : ""}" data-key="${key}">
+        <input type="checkbox" value="${key}" />
+        <span>${t(lang, "symptoms")[key]}</span>
+      </label>`;
   }).join("");
 
   list.querySelectorAll(".symptom-item").forEach((item) => {
     const checkbox = item.querySelector("input");
-    item.addEventListener("click", (evt) => {
-      if (evt.target !== checkbox) checkbox.checked = !checkbox.checked;
+    checkbox.addEventListener("change", () => {
       item.classList.toggle("checked", checkbox.checked);
       if (checkbox.value === "other") {
         el("otherText").classList.toggle("hidden", !checkbox.checked);
@@ -242,7 +241,8 @@ function renderResult(res) {
   badge.innerHTML = `<div class="level">${t(lang, "level_" + res.level)}</div>`;
 
   const guideList = el("guideList");
-  guideList.innerHTML = (res.guide || []).map((g) => `<li>${g}</li>`).join("");
+  const guides = (t(lang, "guides")[res.level] || []).map((g) => g.replace("{hotline}", state.hotlinePhone));
+  guideList.innerHTML = guides.map((g) => `<li>${g}</li>`).join("");
 
   const isAlert = res.level === "경고" || res.level === "위험";
   el("hotlineBox").classList.toggle("hidden", !isAlert);

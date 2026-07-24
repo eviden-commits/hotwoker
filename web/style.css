@@ -165,7 +165,8 @@ textarea { resize: vertical; min-height: 60px; }
 .symptom-item input { width: 18px; height: 18px; accent-color: var(--primary); }
 .symptom-item.emergency { border-color: var(--warning); }
 .symptom-item.emergency.checked { background: var(--warning-bg); }
-.symptom-item label { flex: 1; font-size: 14px; font-weight: 600; cursor: pointer; }
+.symptom-item { cursor: pointer; }
+.symptom-item span { flex: 1; font-size: 14px; font-weight: 600; }
 
 .error-msg { color: var(--warning); font-size: 13px; font-weight: 600; margin: -8px 0 16px; }
 
