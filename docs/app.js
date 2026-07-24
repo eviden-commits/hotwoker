@@ -47,9 +47,10 @@ function applyLangTexts() {
 function renderSiteOptions() {
   const select = el("siteSelect");
   const lang = state.lang;
+  const currentValue = select.value || state.siteName;
   select.innerHTML = `<option value="">${t(lang, "sitePlaceholder")}</option>` +
     state.sites.map((s) => `<option value="${s.siteName}">${s.siteName}</option>`).join("");
-  if (state.siteName) select.value = state.siteName;
+  if (currentValue) select.value = currentValue;
 }
 
 function renderSiteContactBar() {
