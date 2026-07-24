@@ -22,6 +22,9 @@ const el = (id) => document.getElementById(id);
 function applyLangTexts() {
   const lang = state.lang;
   document.documentElement.lang = lang;
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
   el("appTitle").textContent = t(lang, "appTitle");
   el("siteStepTitle").textContent = t(lang, "siteStepTitle");
   el("siteLabel").textContent = t(lang, "siteLabel");
@@ -126,10 +129,12 @@ function initInfoBar() {
   }
 }
 
-el("langSelect").addEventListener("change", (e) => {
-  state.lang = e.target.value;
-  localStorage.setItem("hw_lang", state.lang);
-  applyLangTexts();
+document.querySelectorAll(".lang-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    state.lang = btn.dataset.lang;
+    localStorage.setItem("hw_lang", state.lang);
+    applyLangTexts();
+  });
 });
 
 el("startBtn").addEventListener("click", () => {
@@ -207,7 +212,6 @@ function renderResult(res) {
 }
 
 (async function init() {
-  el("langSelect").value = state.lang;
   applyLangTexts();
   await Promise.all([loadSites(), loadAppConfig()]);
   initInfoBar();

@@ -8,14 +8,15 @@
 </head>
 <body>
 <div class="app">
+  <div class="shell">
   <header>
     <h1 id="appTitle">세방테크 온열질환 자가진단</h1>
-    <select id="langSelect" class="lang-select">
-      <option value="ko">한국어</option>
-      <option value="zh">中文</option>
-      <option value="ru">Русский</option>
-      <option value="mn">Монгол</option>
-    </select>
+    <div id="langSwitch" class="lang-switch">
+      <button type="button" class="lang-btn" data-lang="ko">한국어</button>
+      <button type="button" class="lang-btn" data-lang="zh">中文</button>
+      <button type="button" class="lang-btn" data-lang="ru">Русский</button>
+      <button type="button" class="lang-btn" data-lang="mn">Монгол</button>
+    </div>
   </header>
 
   <main>
@@ -26,7 +27,6 @@
 
     <!-- Step 1: 현장/이름 -->
     <section id="siteStep" class="card">
-      <div class="card-icon">🌡️</div>
       <h2 id="siteStepTitle">현장을 선택해주세요</h2>
       <div class="field">
         <label id="siteLabel">현장명</label>
@@ -73,6 +73,7 @@
       <button id="backBtn" type="button" class="btn btn-outline">처음으로</button>
     </section>
   </main>
+  </div>
 </div>
 
 <script src="api.js"></script>
