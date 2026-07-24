@@ -19,10 +19,9 @@ var CONFIG = {
   // 최초 화면에 노출되는 본사 연락처. 현장별 비상연락처는 Sites 시트의 emergencyPhone 컬럼에서 관리합니다.
   HQ_PHONE: '070-5079-8002',
 
-  // 관리자 대시보드 로그인 비밀번호. 최초 설정 후 Auth.gs의 setAdminPassword_로 변경 권장.
-  AUTH: {
-    ADMIN_PASSWORD: 'sbtec-hw-2026'
-  },
+  // 관리자 대시보드 로그인 비밀번호는 코드(git)에 두지 않고 PropertiesService(스크립트 속성)에만
+  // 저장합니다. Apps Script 편집기 > 프로젝트 설정 > 스크립트 속성에서 ADMIN_PASSWORD 키로
+  // 직접 등록하세요. Auth.gs 참고.
 
   SHEETS: {
     SUBMISSIONS: 'submissions',
