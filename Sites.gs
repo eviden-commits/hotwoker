@@ -1,9 +1,9 @@
 /* =========================================================================
    Sites.gs
-   현장 목록 조회/관리 (비상연락처, GPS 좌표 포함)
+   현장 목록 조회/관리 (비상연락처, 담당자명, GPS 좌표 포함)
    ========================================================================= */
 
-var SITE_COLUMNS_ = ['siteName', 'emergencyPhone', 'lat', 'lng', 'active'];
+var SITE_COLUMNS_ = ['siteName', 'emergencyPhone', 'contactName', 'lat', 'lng', 'active'];
 
 // 기존 시트에 없는 컬럼을 자동으로 추가합니다(구버전 시트 호환).
 function ensureSitesSchema_(sheet) {
@@ -33,6 +33,7 @@ function getSiteList_(ss) {
       return {
         siteName: r.siteName,
         emergencyPhone: r.emergencyPhone || '',
+        contactName: r.contactName || '',
         lat: r.lat === '' || r.lat === undefined ? null : Number(r.lat),
         lng: r.lng === '' || r.lng === undefined ? null : Number(r.lng)
       };
@@ -49,6 +50,7 @@ function addSite_(ss, payload) {
   var row = header.map(function (key) {
     if (key === 'siteName') return name;
     if (key === 'emergencyPhone') return String(payload.emergencyPhone || '').trim();
+    if (key === 'contactName') return String(payload.contactName || '').trim();
     if (key === 'lat') return payload.lat === undefined || payload.lat === '' ? '' : Number(payload.lat);
     if (key === 'lng') return payload.lng === undefined || payload.lng === '' ? '' : Number(payload.lng);
     if (key === 'active') return true;
@@ -57,7 +59,7 @@ function addSite_(ss, payload) {
   sheet.appendRow(row);
 }
 
-// 비상연락처/위경도 등 현장 정보를 부분 업데이트합니다. payload에 있는 필드만 갱신합니다.
+// 비상연락처/담당자명/위경도 등 현장 정보를 부분 업데이트합니다. payload에 있는 필드만 갱신합니다.
 function updateSite_(ss, payload) {
   var name = String(payload.siteName || '').trim();
   if (!name) throw new Error('현장명이 필요합니다.');
@@ -73,6 +75,9 @@ function updateSite_(ss, payload) {
       var rowNum = i + 1;
       if (payload.emergencyPhone !== undefined) {
         sheet.getRange(rowNum, header.indexOf('emergencyPhone') + 1).setValue(String(payload.emergencyPhone).trim());
+      }
+      if (payload.contactName !== undefined) {
+        sheet.getRange(rowNum, header.indexOf('contactName') + 1).setValue(String(payload.contactName).trim());
       }
       if (payload.lat !== undefined) {
         sheet.getRange(rowNum, header.indexOf('lat') + 1).setValue(payload.lat === '' ? '' : Number(payload.lat));

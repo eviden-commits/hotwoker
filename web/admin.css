@@ -14,9 +14,10 @@ body { font-size: 14px; }
 
 #dashboardSection { max-width: 1100px; margin: 0 auto; padding: 32px 20px; display: none; }
 
-.header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
 .header-bar h2 { font-size: 22px; font-weight: 800; margin: 0; color: var(--primary); }
 .header-bar .btn { width: auto; padding: 8px 16px; font-size: 13px; }
+.header-actions { display: flex; gap: 8px; }
 
 .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
 .kpi-card { background: var(--surface); padding: 18px 20px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
@@ -29,6 +30,10 @@ body { font-size: 14px; }
 .filter-group label { font-size: 11px; font-weight: 700; color: var(--muted); }
 .filter-group select { width: 140px; padding: 9px 10px; font-size: 13px; }
 .filter-card .btn { width: auto; padding: 9px 16px; font-size: 13px; }
+
+.table-toolbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.btn-danger { width: auto; padding: 8px 16px; font-size: 13px; background: var(--danger); color: #fff; }
+.btn-danger:disabled { background: #cbd5e1; cursor: not-allowed; }
 
 .table-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }

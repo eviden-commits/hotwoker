@@ -19,7 +19,7 @@ function doGet(e) {
         break;
 
       case 'getAppConfig':
-        result = { hotlinePhone: CONFIG.HOTLINE_PHONE, hqPhone: CONFIG.HQ_PHONE };
+        result = { hotlinePhone: CONFIG.HOTLINE_PHONE, hqPhone: CONFIG.HQ_PHONE, spreadsheetId: CONFIG.SPREADSHEET_ID };
         break;
 
       case 'listSubmissions':
@@ -33,6 +33,17 @@ function doGet(e) {
             status: e.parameter.status || ''
           })
         };
+        break;
+
+      case 'geocodeAddress':
+        if (!checkAdminPassword_(e.parameter.password)) {
+          return jsonOutput_({ authError: true, error: '비밀번호가 올바르지 않습니다.' });
+        }
+        try {
+          result = geocodeAddress_(e.parameter.address || '');
+        } catch (geocodeError) {
+          result = { error: geocodeError.message };
+        }
         break;
 
       default:
@@ -78,6 +89,13 @@ function doPost(e) {
           return jsonOutput_({ authError: true, error: '비밀번호가 올바르지 않습니다.' });
         }
         result = updateSubmissionStatus_(ss, payload);
+        break;
+
+      case 'deleteSubmissions':
+        if (!checkAdminPassword_(payload.password)) {
+          return jsonOutput_({ authError: true, error: '비밀번호가 올바르지 않습니다.' });
+        }
+        result = deleteSubmissions_(ss, payload);
         break;
 
       case 'adminLogin':

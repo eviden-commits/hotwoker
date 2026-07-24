@@ -34,7 +34,14 @@ async function login() {
 async function enterDashboard() {
   $("loginSection").style.display = "none";
   $("dashboardSection").style.display = "block";
-  await Promise.all([loadSites(), loadSubmissions()]);
+  await Promise.all([loadSites(), loadSubmissions(), loadAppConfig()]);
+}
+
+async function loadAppConfig() {
+  const res = await apiGet("getAppConfig");
+  if (res.spreadsheetId) {
+    $("sheetLinkBtn").href = `https://docs.google.com/spreadsheets/d/${res.spreadsheetId}/edit`;
+  }
 }
 
 async function loadSites() {
@@ -51,6 +58,7 @@ function renderSitesTable() {
   tbody.innerHTML = adminState.sites.map((s) => `
     <tr>
       <td>${s.siteName}</td>
+      <td><input type="text" class="site-name-input" data-field="contactName" data-site="${s.siteName}" value="${s.contactName || ""}" placeholder="담당자명" style="width:80px;" /></td>
       <td><input type="text" class="site-phone-input" data-field="emergencyPhone" data-site="${s.siteName}" value="${s.emergencyPhone || ""}" placeholder="비상연락처" /></td>
       <td><input type="text" class="site-geo-input" data-field="lat" data-site="${s.siteName}" value="${s.lat ?? ""}" placeholder="위도" style="width:90px;" /></td>
       <td><input type="text" class="site-geo-input" data-field="lng" data-site="${s.siteName}" value="${s.lng ?? ""}" placeholder="경도" style="width:90px;" /></td>
@@ -61,10 +69,11 @@ function renderSitesTable() {
     btn.addEventListener("click", async () => {
       const site = btn.dataset.site;
       const escaped = CSS.escape(site);
+      const contactName = tbody.querySelector(`.site-name-input[data-site="${escaped}"]`).value.trim();
       const phone = tbody.querySelector(`.site-phone-input[data-site="${escaped}"]`).value.trim();
       const lat = tbody.querySelector(`.site-geo-input[data-field="lat"][data-site="${escaped}"]`).value.trim();
       const lng = tbody.querySelector(`.site-geo-input[data-field="lng"][data-site="${escaped}"]`).value.trim();
-      await apiPost("updateSite", { password: adminState.password, siteName: site, emergencyPhone: phone, lat, lng });
+      await apiPost("updateSite", { password: adminState.password, siteName: site, contactName, emergencyPhone: phone, lat, lng });
       await loadSites();
     });
   });
@@ -103,8 +112,11 @@ function renderKpi() {
 
 function renderTable() {
   const tbody = $("submissionsBody");
+  $("selectAllCheckbox").checked = false;
+  updateDeleteButtonState();
+
   if (adminState.submissions.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);">데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);">데이터가 없습니다.</td></tr>`;
     return;
   }
   tbody.innerHTML = adminState.submissions.map((r) => {
@@ -118,6 +130,7 @@ function renderTable() {
       </div>` : "";
     return `
       <tr>
+        <td><input type="checkbox" class="row-checkbox" data-id="${r.id}" /></td>
         <td>${tsStr}</td>
         <td>${r.siteName}</td>
         <td>${r.workerName}</td>
@@ -131,6 +144,25 @@ function renderTable() {
   tbody.querySelectorAll("button[data-id]").forEach((btn) => {
     btn.addEventListener("click", () => updateStatus(btn.dataset.id, btn.dataset.status));
   });
+  tbody.querySelectorAll(".row-checkbox").forEach((cb) => {
+    cb.addEventListener("change", updateDeleteButtonState);
+  });
+}
+
+function getSelectedIds() {
+  return Array.from(document.querySelectorAll(".row-checkbox:checked")).map((cb) => cb.dataset.id);
+}
+
+function updateDeleteButtonState() {
+  $("deleteSelectedBtn").disabled = getSelectedIds().length === 0;
+}
+
+async function deleteSelected() {
+  const ids = getSelectedIds();
+  if (ids.length === 0) return;
+  if (!confirm(`선택한 ${ids.length}건을 삭제하시겠습니까? 되돌릴 수 없습니다.`)) return;
+  await apiPost("deleteSubmissions", { password: adminState.password, ids });
+  await loadSubmissions();
 }
 
 async function updateStatus(id, status) {
@@ -146,17 +178,45 @@ async function addSite() {
     await apiPost("addSite", {
       password: adminState.password,
       siteName: name,
+      contactName: $("newSiteContactName").value.trim(),
       emergencyPhone: $("newSitePhone").value.trim(),
       lat: $("newSiteLat").value.trim(),
       lng: $("newSiteLng").value.trim()
     });
     $("newSiteName").value = "";
+    $("newSiteContactName").value = "";
     $("newSitePhone").value = "";
     $("newSiteLat").value = "";
     $("newSiteLng").value = "";
+    $("newSiteAddress").value = "";
     await loadSites();
   } catch (e) {
     $("siteManageMsg").textContent = "현장 추가 중 오류가 발생했습니다.";
+  }
+}
+
+async function geocodeAddress() {
+  const address = $("newSiteAddress").value.trim();
+  if (!address) return;
+  $("siteManageMsg").textContent = "";
+  $("siteManageMsg").style.color = "";
+  $("geocodeBtn").disabled = true;
+  $("geocodeBtn").textContent = "검색 중...";
+  try {
+    const res = await apiGet("geocodeAddress", { password: adminState.password, address });
+    if (res.error) {
+      $("siteManageMsg").textContent = res.error;
+    } else {
+      $("newSiteLat").value = res.lat;
+      $("newSiteLng").value = res.lng;
+      $("siteManageMsg").style.color = "var(--success)";
+      $("siteManageMsg").textContent = `좌표를 찾았습니다: ${res.formattedAddress}`;
+    }
+  } catch (e) {
+    $("siteManageMsg").textContent = "좌표 검색 중 오류가 발생했습니다.";
+  } finally {
+    $("geocodeBtn").disabled = false;
+    $("geocodeBtn").textContent = "좌표 찾기";
   }
 }
 
@@ -175,6 +235,12 @@ $("filterSite").addEventListener("change", loadSubmissions);
 $("filterLevel").addEventListener("change", loadSubmissions);
 $("filterStatus").addEventListener("change", loadSubmissions);
 $("addSiteBtn").addEventListener("click", addSite);
+$("geocodeBtn").addEventListener("click", geocodeAddress);
+$("deleteSelectedBtn").addEventListener("click", deleteSelected);
+$("selectAllCheckbox").addEventListener("change", (e) => {
+  document.querySelectorAll(".row-checkbox").forEach((cb) => { cb.checked = e.target.checked; });
+  updateDeleteButtonState();
+});
 
 if (adminState.password) {
   enterDashboard();

@@ -56,6 +56,28 @@ function listSubmissions_(ss, filters) {
   return rows;
 }
 
+function deleteSubmissions_(ss, payload) {
+  var ids = payload.ids || [];
+  if (ids.length === 0) return { deleted: 0 };
+
+  var idSet = {};
+  ids.forEach(function (id) { idSet[id] = true; });
+
+  var sheet = ss.getSheetByName(CONFIG.SHEETS.SUBMISSIONS);
+  var values = sheet.getDataRange().getValues();
+  var header = values[0];
+  var idCol = header.indexOf('id');
+
+  var rowsToDelete = [];
+  for (var i = 1; i < values.length; i++) {
+    if (idSet[values[i][idCol]]) rowsToDelete.push(i + 1);
+  }
+  rowsToDelete.sort(function (a, b) { return b - a; });
+  rowsToDelete.forEach(function (rowNum) { sheet.deleteRow(rowNum); });
+
+  return { deleted: rowsToDelete.length };
+}
+
 function updateSubmissionStatus_(ss, payload) {
   var id = payload.id;
   var status = payload.status;

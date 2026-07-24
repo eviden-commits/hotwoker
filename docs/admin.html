@@ -23,7 +23,10 @@
 <div id="dashboardSection">
   <div class="header-bar">
     <h2>세방테크 온열질환 자가진단 관리자</h2>
-    <button id="logoutBtn" type="button" class="btn btn-outline">로그아웃</button>
+    <div class="header-actions">
+      <a id="sheetLinkBtn" class="btn btn-outline" href="#" target="_blank" rel="noopener">스프레드시트 열기</a>
+      <button id="logoutBtn" type="button" class="btn btn-outline">로그아웃</button>
+    </div>
   </div>
 
   <div class="kpi-grid">
@@ -72,10 +75,15 @@
     <button id="refreshBtn" type="button" class="btn btn-primary">새로고침</button>
   </div>
 
+  <div class="table-toolbar">
+    <button id="deleteSelectedBtn" type="button" class="btn btn-danger" disabled>선택 삭제</button>
+  </div>
+
   <div class="table-card">
     <table>
       <thead>
         <tr>
+          <th><input type="checkbox" id="selectAllCheckbox" /></th>
           <th>시각</th><th>현장</th><th>이름</th><th>등급</th><th>점수</th><th>상태</th><th>조치</th>
         </tr>
       </thead>
@@ -86,15 +94,20 @@
   <div class="site-manage">
     <h3>현장 / 비상연락처 / GPS 좌표 관리</h3>
     <table>
-      <thead><tr><th>현장명</th><th>비상연락처</th><th>위도</th><th>경도</th><th></th></tr></thead>
+      <thead><tr><th>현장명</th><th>담당자</th><th>비상연락처</th><th>위도</th><th>경도</th><th></th></tr></thead>
       <tbody id="sitesBody"></tbody>
     </table>
-    <div class="site-manage-form" style="margin-top:14px;">
+    <div class="site-manage-form" style="margin-top:14px;flex-wrap:wrap;">
       <input type="text" id="newSiteName" placeholder="새 현장명" />
+      <input type="text" id="newSiteContactName" placeholder="담당자명" style="width:100px;" />
       <input type="text" id="newSitePhone" placeholder="비상연락처" />
-      <input type="text" id="newSiteLat" placeholder="위도 (예: 37.3967)" style="width:150px;" />
-      <input type="text" id="newSiteLng" placeholder="경도 (예: 127.1092)" style="width:150px;" />
+      <input type="text" id="newSiteLat" placeholder="위도" style="width:110px;" />
+      <input type="text" id="newSiteLng" placeholder="경도" style="width:110px;" />
       <button id="addSiteBtn" type="button" class="btn btn-primary">추가</button>
+    </div>
+    <div class="site-manage-form" style="margin-top:8px;">
+      <input type="text" id="newSiteAddress" placeholder="주소로 좌표 찾기 (예: 경기도 성남시 분당구 판교로 641)" />
+      <button id="geocodeBtn" type="button" class="btn btn-outline" style="width:auto;white-space:nowrap;">좌표 찾기</button>
     </div>
     <div id="siteManageMsg" class="msg-box msg-error"></div>
     <p style="font-size:12px;color:var(--muted);margin-top:10px;">위경도를 입력하면 근로자가 접속 시 GPS로 가장 가까운 현장을 자동 인식합니다. 비워두면 자동인식 대상에서 제외되고 수동 선택만 가능합니다.</p>
