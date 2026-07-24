@@ -19,7 +19,7 @@ function doGet(e) {
         break;
 
       case 'getAppConfig':
-        result = { hotlinePhone: CONFIG.HOTLINE_PHONE };
+        result = { hotlinePhone: CONFIG.HOTLINE_PHONE, hqPhone: CONFIG.HQ_PHONE };
         break;
 
       case 'listSubmissions':
@@ -64,6 +64,13 @@ function doPost(e) {
         }
         addSite_(ss, payload);
         result = { status: 'ok' };
+        break;
+
+      case 'updateSitePhone':
+        if (!checkAdminPassword_(payload.password)) {
+          return jsonOutput_({ authError: true, error: '비밀번호가 올바르지 않습니다.' });
+        }
+        result = updateSitePhone_(ss, payload);
         break;
 
       case 'updateSubmissionStatus':

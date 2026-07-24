@@ -42,7 +42,26 @@ async function loadSites() {
   adminState.sites = res.sites || [];
   const select = $("filterSite");
   select.innerHTML = `<option value="">전체 현장</option>` +
-    adminState.sites.map((s) => `<option value="${s}">${s}</option>`).join("");
+    adminState.sites.map((s) => `<option value="${s.siteName}">${s.siteName}</option>`).join("");
+  renderSitesTable();
+}
+
+function renderSitesTable() {
+  const tbody = $("sitesBody");
+  tbody.innerHTML = adminState.sites.map((s) => `
+    <tr>
+      <td>${s.siteName}</td>
+      <td><input type="text" class="site-phone-input" data-site="${s.siteName}" value="${s.emergencyPhone || ""}" placeholder="비상연락처" /></td>
+      <td><button data-site="${s.siteName}" class="save-phone-btn">저장</button></td>
+    </tr>`).join("");
+
+  tbody.querySelectorAll(".save-phone-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const input = tbody.querySelector(`.site-phone-input[data-site="${CSS.escape(btn.dataset.site)}"]`);
+      await apiPost("updateSitePhone", { password: adminState.password, siteName: btn.dataset.site, emergencyPhone: input.value.trim() });
+      await loadSites();
+    });
+  });
 }
 
 async function loadSubmissions() {
@@ -118,8 +137,9 @@ async function addSite() {
   if (!name) return;
   $("siteManageMsg").textContent = "";
   try {
-    await apiPost("addSite", { password: adminState.password, siteName: name });
+    await apiPost("addSite", { password: adminState.password, siteName: name, emergencyPhone: $("newSitePhone").value.trim() });
     $("newSiteName").value = "";
+    $("newSitePhone").value = "";
     await loadSites();
   } catch (e) {
     $("siteManageMsg").textContent = "현장 추가 중 오류가 발생했습니다.";

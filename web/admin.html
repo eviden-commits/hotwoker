@@ -84,9 +84,14 @@
   </div>
 
   <div class="site-manage">
-    <h3>현장 추가</h3>
-    <div class="site-manage-form">
+    <h3>현장 / 비상연락처 관리</h3>
+    <table>
+      <thead><tr><th>현장명</th><th>비상연락처</th><th></th></tr></thead>
+      <tbody id="sitesBody"></tbody>
+    </table>
+    <div class="site-manage-form" style="margin-top:14px;">
       <input type="text" id="newSiteName" placeholder="새 현장명" />
+      <input type="text" id="newSitePhone" placeholder="비상연락처" />
       <button id="addSiteBtn" type="button" class="btn btn-primary">추가</button>
     </div>
     <div id="siteManageMsg" class="msg-box msg-error"></div>

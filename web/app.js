@@ -28,7 +28,9 @@ function applyLangTexts() {
   el("nameLabel").textContent = t(lang, "nameLabel");
   el("nameInput").placeholder = t(lang, "namePlaceholder");
   el("startBtn").textContent = t(lang, "startBtn");
+  el("hqContactLabel").textContent = t(lang, "hqContactLabel");
   el("changeInfoBtn").textContent = t(lang, "changeInfoBtn");
+  el("siteContactLabel").textContent = t(lang, "siteContactLabel");
   el("checkStepTitle").textContent = t(lang, "checkStepTitle");
   el("otherText").placeholder = t(lang, "otherPlaceholder");
   el("submitBtn").textContent = t(lang, "submitBtn");
@@ -43,8 +45,18 @@ function renderSiteOptions() {
   const select = el("siteSelect");
   const lang = state.lang;
   select.innerHTML = `<option value="">${t(lang, "sitePlaceholder")}</option>` +
-    state.sites.map((s) => `<option value="${s}">${s}</option>`).join("");
+    state.sites.map((s) => `<option value="${s.siteName}">${s.siteName}</option>`).join("");
   if (state.siteName) select.value = state.siteName;
+}
+
+function renderSiteContactBar() {
+  const site = state.sites.find((s) => s.siteName === state.siteName);
+  const phone = site && site.emergencyPhone;
+  el("siteContactBar").classList.toggle("hidden", !phone);
+  if (phone) {
+    el("siteContactPhone").textContent = phone;
+    el("siteContactLink").href = "tel:" + phone;
+  }
 }
 
 function renderSymptomList() {
@@ -94,6 +106,7 @@ async function loadAppConfig() {
     state.hotlinePhone = res.hotlinePhone || "";
     el("hotlinePhone").textContent = state.hotlinePhone;
     el("hotlinePhone").href = "tel:" + state.hotlinePhone;
+    el("hqCallLink").href = "tel:" + (res.hqPhone || "");
   } catch (e) {
     el("hotlineBox").classList.add("hidden");
   }
@@ -105,6 +118,7 @@ function initInfoBar() {
     el("infoBarName").textContent = state.workerName;
     el("infoBar").classList.remove("hidden");
     el("siteStep").classList.add("hidden");
+    renderSiteContactBar();
     showStep("check");
   } else {
     el("infoBar").classList.add("hidden");
@@ -133,6 +147,7 @@ el("startBtn").addEventListener("click", () => {
   el("infoBarSite").textContent = siteName;
   el("infoBarName").textContent = workerName;
   el("infoBar").classList.remove("hidden");
+  renderSiteContactBar();
   showStep("check");
 });
 

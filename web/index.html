@@ -37,11 +37,23 @@
       </div>
       <div id="siteError" class="error-msg hidden"></div>
       <button id="startBtn" type="button" class="btn btn-primary">시작하기</button>
+      <div class="contact-bar">
+        <a id="hqCallLink" href="tel:">
+          <span class="icon">📞</span>
+          <span id="hqContactLabel">본사 연락</span>
+        </a>
+      </div>
     </section>
 
     <!-- Step 2: 증상 체크 -->
     <section id="checkStep" class="card hidden">
       <h2 id="checkStepTitle">현재 느껴지는 증상을 모두 체크해주세요</h2>
+      <div id="siteContactBar" class="contact-bar hidden">
+        <a id="siteContactLink" href="tel:">
+          <span class="icon">📞</span>
+          <span id="siteContactLabel">현장 비상연락</span>: <span id="siteContactPhone"></span>
+        </a>
+      </div>
       <div id="symptomList" class="symptom-list"></div>
       <textarea id="otherText" class="hidden" placeholder="기타 증상을 구체적으로 적어주세요"></textarea>
       <div id="checkError" class="error-msg hidden"></div>

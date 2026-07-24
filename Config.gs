@@ -16,6 +16,9 @@ var CONFIG = {
   // 이상증상 발생 시 근로자 화면에 상시 노출되는 비상연락처
   HOTLINE_PHONE: '070-0000-0000',
 
+  // 최초 화면에 노출되는 본사 연락처. 현장별 비상연락처는 Sites 시트의 emergencyPhone 컬럼에서 관리합니다.
+  HQ_PHONE: '02-0000-0000',
+
   // 관리자 대시보드 로그인 비밀번호. 최초 설정 후 Auth.gs의 setAdminPassword_로 변경 권장.
   AUTH: {
     ADMIN_PASSWORD: 'sbtec-hw-2026'

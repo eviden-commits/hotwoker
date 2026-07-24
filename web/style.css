@@ -175,4 +175,12 @@ textarea { resize: vertical; min-height: 60px; }
 }
 .hotline a { color: #fff; text-decoration: none; }
 
+.contact-bar {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 12px 14px; margin-bottom: 16px; font-weight: 700; font-size: 14px; color: var(--primary);
+}
+.contact-bar a { color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.contact-bar .icon { font-size: 16px; }
+
 .hidden { display: none !important; }
