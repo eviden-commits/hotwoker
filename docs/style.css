@@ -106,7 +106,7 @@ main {
 
 .field { margin-bottom: 18px; }
 .field label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
-select, input[type="text"], textarea {
+select, input[type="text"], input[type="password"], textarea {
   width: 100%;
   padding: 13px 14px;
   font-size: 15px;
