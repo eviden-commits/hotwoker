@@ -217,7 +217,7 @@ el("submitBtn").addEventListener("click", async () => {
       workerName: state.workerName,
       answers: { symptoms: checked, otherText: el("otherText").value.trim() }
     });
-    renderResult(res);
+    renderResult(res, checked);
     showStep("result");
   } catch (e) {
     el("checkError").textContent = t(state.lang, "errorGeneric");
@@ -236,7 +236,7 @@ el("backBtn").addEventListener("click", () => {
   showStep("check");
 });
 
-function renderResult(res) {
+function renderResult(res, checkedSymptoms) {
   const lang = state.lang;
   const badge = el("resultBadge");
   badge.className = "result-badge result-level-" + res.level;
@@ -252,7 +252,16 @@ function renderResult(res) {
   const smsBtn = el("hotlineSmsBtn");
   smsBtn.classList.toggle("hidden", !isAlert);
   if (isAlert) {
-    const body = `[온열질환 ${res.level}] 현장: ${state.siteName} / 성명: ${state.workerName} - 즉시 도움이 필요합니다.`;
+    // Hot Line 수신자는 한국인 관리자이므로 근로자의 화면 언어와 무관하게 항상 한국어로 작성합니다.
+    const koSymptoms = I18N.ko.symptoms;
+    const otherText = el("otherText").value.trim();
+    const labels = (checkedSymptoms || []).map((key) => {
+      if (key === "other") return otherText ? `기타: ${otherText}` : koSymptoms.other;
+      return koSymptoms[key];
+    });
+    const body = `${state.workerName}님이 온열질환 항목 ${labels.length}개를 체크하였습니다.\n`
+      + labels.map((l) => `- ${l}`).join("\n")
+      + `\n즉시 확인 부탁드립니다. (현장: ${state.siteName})`;
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const sep = isIOS ? "&" : "?";
     smsBtn.href = `sms:${state.hotlinePhone}${sep}body=${encodeURIComponent(body)}`;
