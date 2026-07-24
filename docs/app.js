@@ -39,6 +39,7 @@ function applyLangTexts() {
   el("submitBtn").textContent = t(lang, "submitBtn");
   el("resultTitle").textContent = t(lang, "resultTitle");
   el("hotlineLabel").textContent = t(lang, "hotlineLabel");
+  el("hotlineSmsLabel").textContent = t(lang, "hotlineSmsLabel");
   el("backBtn").textContent = t(lang, "backBtn");
   renderSiteOptions();
   renderSymptomList();
@@ -247,6 +248,15 @@ function renderResult(res) {
 
   const isAlert = res.level === "경고" || res.level === "위험";
   el("hotlineBox").classList.toggle("hidden", !isAlert);
+
+  const smsBtn = el("hotlineSmsBtn");
+  smsBtn.classList.toggle("hidden", !isAlert);
+  if (isAlert) {
+    const body = `[온열질환 ${res.level}] 현장: ${state.siteName} / 성명: ${state.workerName} - 즉시 도움이 필요합니다.`;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const sep = isIOS ? "&" : "?";
+    smsBtn.href = `sms:${state.hotlinePhone}${sep}body=${encodeURIComponent(body)}`;
+  }
 }
 
 (async function init() {

@@ -41,6 +41,7 @@ const I18N = {
     level_경고: "경고",
     level_위험: "위험",
     hotlineLabel: "이상증상 발생 시 Hot Line",
+    hotlineSmsLabel: "문자 보내기",
     backBtn: "처음으로",
     guides: {
       정상: ["특이사항 없음. 정기적인 수분 섭취와 휴식을 유지하세요."],
@@ -100,6 +101,7 @@ const I18N = {
     level_경고: "警告",
     level_위험: "危险",
     hotlineLabel: "出现异常症状时 Hot Line",
+    hotlineSmsLabel: "发短信",
     backBtn: "返回首页",
     guides: {
       정상: ["无特殊情况。请保持定期补水和休息。"],
@@ -159,6 +161,7 @@ const I18N = {
     level_경고: "Предупреждение",
     level_위험: "Опасность",
     hotlineLabel: "При появлении симптомов звоните на Hot Line",
+    hotlineSmsLabel: "Отправить SMS",
     backBtn: "На главную",
     guides: {
       정상: ["Особых отклонений нет. Регулярно пейте воду и отдыхайте."],
@@ -218,6 +221,7 @@ const I18N = {
     level_경고: "Анхааруулга",
     level_위험: "Аюултай",
     hotlineLabel: "Асуудал гарвал Hot Line-руу залгана уу",
+    hotlineSmsLabel: "SMS илгээх",
     backBtn: "Эхлэл рүү",
     guides: {
       정상: ["Онцгой шинж тэмдэг алга. Тогтмол ус уож, амарна уу."],
