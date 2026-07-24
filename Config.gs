@@ -4,8 +4,8 @@
    ========================================================================= */
 
 var CONFIG = {
-  SYSTEM_NAME: 'Heat Illness Self-Check System',
-  SYSTEM_KO_NAME: '근로자 온열질환 자가진단 시스템',
+  SYSTEM_NAME: 'Sebangtec Heat Illness Self-Check System',
+  SYSTEM_KO_NAME: '세방테크 근로자 온열질환 자가진단 시스템',
 
   // setupHotworkerSystem() 실행 후 로그에 출력된 ID를 여기에 채워 넣으세요.
   SPREADSHEET_ID: '16ygXSEFhL-FDKJtgHd2qdyZcwIY3M-TNv6bu3RU2VdI',
@@ -17,7 +17,7 @@ var CONFIG = {
   HOTLINE_PHONE: '070-0000-0000',
 
   // 최초 화면에 노출되는 본사 연락처. 현장별 비상연락처는 Sites 시트의 emergencyPhone 컬럼에서 관리합니다.
-  HQ_PHONE: '02-0000-0000',
+  HQ_PHONE: '070-5079-8002',
 
   // 관리자 대시보드 로그인 비밀번호. 최초 설정 후 Auth.gs의 setAdminPassword_로 변경 권장.
   AUTH: {

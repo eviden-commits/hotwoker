@@ -7,7 +7,7 @@
 const I18N = {
   ko: {
     langName: "한국어",
-    appTitle: "온열질환 자가진단",
+    appTitle: "세방테크 온열질환 자가진단",
     siteStepTitle: "현장을 선택해주세요",
     siteLabel: "현장명",
     sitePlaceholder: "현장을 선택하세요",
@@ -47,7 +47,7 @@ const I18N = {
   },
   zh: {
     langName: "中文",
-    appTitle: "温热疾病自我检查",
+    appTitle: "世邦泰克 温热疾病自我检查",
     siteStepTitle: "请选择现场",
     siteLabel: "现场名称",
     sitePlaceholder: "请选择现场",
@@ -87,7 +87,7 @@ const I18N = {
   },
   ru: {
     langName: "Русский",
-    appTitle: "Самопроверка теплового заболевания",
+    appTitle: "Sebangtec — Самопроверка теплового заболевания",
     siteStepTitle: "Выберите объект",
     siteLabel: "Название объекта",
     sitePlaceholder: "Выберите объект",
@@ -127,7 +127,7 @@ const I18N = {
   },
   mn: {
     langName: "Монгол",
-    appTitle: "Халуунд өртөх өвчний өөрийн шалгалт",
+    appTitle: "Sebangtec — Халуунд өртөх өвчний өөрийн шалгалт",
     siteStepTitle: "Ажлын байрлалаа сонгоно уу",
     siteLabel: "Байрлалын нэр",
     sitePlaceholder: "Байрлал сонгоно уу",
