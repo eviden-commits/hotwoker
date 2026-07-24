@@ -144,12 +144,17 @@ async function loadAppConfig() {
   try {
     const res = await apiGet("getAppConfig");
     state.hotlinePhone = res.hotlinePhone || "";
-    el("hotlinePhone").textContent = state.hotlinePhone;
-    el("hotlinePhone").href = "tel:" + state.hotlinePhone;
     el("hqCallLink").href = "tel:" + (res.hqPhone || "");
   } catch (e) {
     el("hotlineBox").classList.add("hidden");
   }
+}
+
+// 결과 화면의 "도움요청" 번호는 현재 현장의 DB 비상연락처를 우선 사용하고,
+// 현장에 등록된 번호가 없으면 Config.gs의 전역 HOTLINE_PHONE으로 대체합니다.
+function getActiveHotlinePhone() {
+  const site = state.sites.find((s) => s.siteName === state.siteName);
+  return (site && site.emergencyPhone) || state.hotlinePhone;
 }
 
 function initInfoBar() {
@@ -242,8 +247,10 @@ function renderResult(res, checkedSymptoms) {
   badge.className = "result-badge result-level-" + res.level;
   badge.innerHTML = `<div class="level">${t(lang, "level_" + res.level)}</div>`;
 
+  const phone = getActiveHotlinePhone();
+
   const guideList = el("guideList");
-  const guides = (t(lang, "guides")[res.level] || []).map((g) => g.replace("{hotline}", state.hotlinePhone));
+  const guides = (t(lang, "guides")[res.level] || []).map((g) => g.replace("{hotline}", phone));
   guideList.innerHTML = guides.map((g) => `<li>${g}</li>`).join("");
 
   const isAlert = res.level === "경고" || res.level === "위험";
@@ -252,6 +259,9 @@ function renderResult(res, checkedSymptoms) {
   const smsBtn = el("hotlineSmsBtn");
   smsBtn.classList.toggle("hidden", !isAlert);
   if (isAlert) {
+    el("hotlinePhone").textContent = phone;
+    el("hotlinePhone").href = "tel:" + phone;
+
     // Hot Line 수신자는 한국인 관리자이므로 근로자의 화면 언어와 무관하게 항상 한국어로 작성합니다.
     const koSymptoms = I18N.ko.symptoms;
     const otherText = el("otherText").value.trim();
@@ -264,7 +274,7 @@ function renderResult(res, checkedSymptoms) {
       + `\n즉시 확인 부탁드립니다. (현장: ${state.siteName})`;
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const sep = isIOS ? "&" : "?";
-    smsBtn.href = `sms:${state.hotlinePhone}${sep}body=${encodeURIComponent(body)}`;
+    smsBtn.href = `sms:${phone}${sep}body=${encodeURIComponent(body)}`;
   }
 }
 
