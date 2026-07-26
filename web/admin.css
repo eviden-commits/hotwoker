@@ -66,6 +66,34 @@ tr:last-child td { border-bottom: none; }
 .site-manage-form input { flex: 1; }
 .site-manage-form button { width: auto; padding: 10px 18px; }
 
+tr[data-id] { cursor: pointer; }
+tr[data-id]:hover { background: var(--bg); }
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5);
+  display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+}
+.modal-box {
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
+  width: 100%; max-width: 440px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; border-bottom: 1px solid var(--border);
+}
+.modal-header h3 { margin: 0; font-size: 16px; font-weight: 800; color: var(--primary); }
+.modal-close { background: none; border: none; font-size: 22px; line-height: 1; color: var(--muted); cursor: pointer; padding: 0; }
+.modal-body { padding: 18px 20px; overflow-y: auto; }
+.modal-row { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+.modal-label { flex-shrink: 0; width: 60px; font-weight: 700; color: var(--muted); }
+.modal-symptoms { align-items: flex-start; }
+#modalSymptomList { list-style: none; margin: 0; padding: 0; flex: 1; }
+#modalSymptomList li {
+  background: var(--bg); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; font-size: 13px;
+}
+.modal-actions { display: flex; gap: 8px; padding: 16px 20px; border-top: 1px solid var(--border); }
+.modal-actions .btn { width: auto; flex: 1; padding: 10px; font-size: 13px; }
+
 @media (max-width: 720px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
 }

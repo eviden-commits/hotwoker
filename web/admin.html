@@ -115,6 +115,30 @@
   </div>
 </div>
 
+<div id="detailModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>자가진단 상세</h3>
+      <button id="modalCloseBtn" type="button" class="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row"><span class="modal-label">시각</span><span id="modalTimestamp"></span></div>
+      <div class="modal-row"><span class="modal-label">현장</span><span id="modalSite"></span></div>
+      <div class="modal-row"><span class="modal-label">이름</span><span id="modalName"></span></div>
+      <div class="modal-row"><span class="modal-label">등급</span><span id="modalLevel"></span></div>
+      <div class="modal-row"><span class="modal-label">상태</span><span id="modalStatus"></span></div>
+      <div class="modal-row modal-symptoms">
+        <span class="modal-label">체크 항목</span>
+        <ul id="modalSymptomList"></ul>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button id="modalInProgressBtn" type="button" class="btn btn-outline">조치중</button>
+      <button id="modalDoneBtn" type="button" class="btn btn-primary">조치완료</button>
+    </div>
+  </div>
+</div>
+
 <script src="api.js"></script>
 <script src="admin.js"></script>
 </body>

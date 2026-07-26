@@ -11,6 +11,19 @@ const adminState = {
 
 const $ = (id) => document.getElementById(id);
 
+const SYMPTOM_LABELS_KO = {
+  bodyTempHigh: "평소보다 높은 체온",
+  headache: "두통",
+  dizziness: "어지러움",
+  nausea: "메스꺼움 / 구역질",
+  cramps: "근육경련",
+  excessiveSweat: "지나치게 많은 땀",
+  fatigue: "갑작스러운 피로감",
+  severeThirst: "심한 갈증",
+  consciousness: "의식저하 / 혼란 (응급)",
+  other: "기타"
+};
+
 async function login() {
   const pwd = $("loginPwd").value.trim();
   if (!pwd) return;
@@ -129,7 +142,7 @@ function renderTable() {
         <button data-id="${r.id}" data-status="완료">완료</button>
       </div>` : "";
     return `
-      <tr>
+      <tr data-id="${r.id}">
         <td><input type="checkbox" class="row-checkbox" data-id="${r.id}" /></td>
         <td>${tsStr}</td>
         <td>${r.siteName}</td>
@@ -142,11 +155,63 @@ function renderTable() {
   }).join("");
 
   tbody.querySelectorAll("button[data-id]").forEach((btn) => {
-    btn.addEventListener("click", () => updateStatus(btn.dataset.id, btn.dataset.status));
+    btn.addEventListener("click", (evt) => {
+      evt.stopPropagation();
+      updateStatus(btn.dataset.id, btn.dataset.status);
+    });
   });
   tbody.querySelectorAll(".row-checkbox").forEach((cb) => {
+    cb.addEventListener("click", (evt) => evt.stopPropagation());
     cb.addEventListener("change", updateDeleteButtonState);
   });
+  tbody.querySelectorAll("tr[data-id]").forEach((row) => {
+    row.addEventListener("dblclick", () => openDetailModal(row.dataset.id));
+  });
+}
+
+function openDetailModal(id) {
+  const record = adminState.submissions.find((r) => r.id === id);
+  if (!record) return;
+  adminState.modalRecordId = id;
+
+  const ts = new Date(record.timestamp);
+  $("modalTimestamp").textContent = `${ts.getMonth() + 1}/${ts.getDate()} ${String(ts.getHours()).padStart(2, "0")}:${String(ts.getMinutes()).padStart(2, "0")}`;
+  $("modalSite").textContent = record.siteName;
+  $("modalName").textContent = record.workerName;
+  $("modalLevel").innerHTML = `<span class="badge badge-${record.level}">${record.level}</span>`;
+  $("modalStatus").innerHTML = record.status ? `<span class="badge badge-${record.status}">${record.status}</span>` : "-";
+
+  let answers = {};
+  try { answers = JSON.parse(record.answersJson || "{}"); } catch (e) { answers = {}; }
+  const symptoms = (answers.symptoms || []).filter((s) => s !== "none");
+  const list = $("modalSymptomList");
+  if (symptoms.length === 0) {
+    list.innerHTML = `<li>체크된 항목 없음</li>`;
+  } else {
+    list.innerHTML = symptoms.map((key) => {
+      const label = key === "other" && answers.otherText
+        ? `기타: ${answers.otherText}`
+        : (SYMPTOM_LABELS_KO[key] || key);
+      return `<li>${label}</li>`;
+    }).join("");
+  }
+
+  const hasStatus = !!record.status;
+  $("modalInProgressBtn").classList.toggle("hidden", !hasStatus);
+  $("modalDoneBtn").classList.toggle("hidden", !hasStatus);
+
+  $("detailModal").classList.remove("hidden");
+}
+
+function closeDetailModal() {
+  $("detailModal").classList.add("hidden");
+  adminState.modalRecordId = null;
+}
+
+async function updateStatusFromModal(status) {
+  if (!adminState.modalRecordId) return;
+  await updateStatus(adminState.modalRecordId, status);
+  closeDetailModal();
 }
 
 function getSelectedIds() {
@@ -241,6 +306,12 @@ $("selectAllCheckbox").addEventListener("change", (e) => {
   document.querySelectorAll(".row-checkbox").forEach((cb) => { cb.checked = e.target.checked; });
   updateDeleteButtonState();
 });
+$("modalCloseBtn").addEventListener("click", closeDetailModal);
+$("detailModal").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) closeDetailModal();
+});
+$("modalInProgressBtn").addEventListener("click", () => updateStatusFromModal("조치중"));
+$("modalDoneBtn").addEventListener("click", () => updateStatusFromModal("완료"));
 
 if (adminState.password) {
   enterDashboard();
